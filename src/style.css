@@ -50,7 +50,7 @@ h1 {
   will-change: filter;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #ff6464aa);
 }
 .logo.vanilla:hover {
   filter: drop-shadow(0 0 2em #f7df1eaa);
@@ -64,9 +64,13 @@ h1 {
   color: #888;
 }
 
-button {
+.file-label input {
+  display: none;
+}
+
+button, .file-label {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid #ebebeb;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
@@ -75,12 +79,14 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
+button:hover, .file-label:hover {
+  border-color: #ff6464aa;
 }
 button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+button:focus-visible, 
+.file-label:focus,
+.file-label:focus-visible {
+  outline: 1px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {
@@ -91,7 +97,7 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
-  button {
+  button, .file-label {
     background-color: #f9f9f9;
   }
 }
