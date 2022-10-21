@@ -4,6 +4,7 @@ import exampleCsv from '../assets/example.csv?raw'
 
 const $uploader = document.querySelector('.uploader')
 const $viewer = document.querySelector('.viewer')
+const $graphContainer = $viewer.querySelector('.graph-container')
 const $selectNewFile = document.querySelector('.select-new-file')
 
 $uploader.style.display = 'block'
@@ -27,7 +28,7 @@ document
 		$viewer.style.display = 'block'
 
 		const { labels, rows } = csvToData(fileContent)
-		generateGraph(labels, rows)
+		generateGraph($graphContainer, labels, rows)
   })
 
 $selectNewFile
@@ -39,7 +40,7 @@ $selectNewFile
 if(window.location.search === '?test'){
 	$uploader.style.display = 'none'
 	$viewer.style.display = 'block'
-	
+
 	const { labels, rows } = csvToData(exampleCsv)
-	generateGraph(labels, rows)
+	generateGraph($graphContainer, labels, rows)
 }

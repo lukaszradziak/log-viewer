@@ -27,9 +27,6 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
 h1 {
@@ -38,10 +35,11 @@ h1 {
 }
 
 #app {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+  padding-top: 2rem;
 }
 
 .logo {
@@ -69,6 +67,7 @@ h1 {
 }
 
 button, .file-label {
+  display: inline-block;
   border-radius: 8px;
   border: 1px solid #ebebeb;
   padding: 0.6em 1.2em;
@@ -78,6 +77,8 @@ button, .file-label {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  margin-bottom: 8px;
+  margin-right: 8px;
 }
 button:hover, .file-label:hover {
   border-color: #ff6464aa;
