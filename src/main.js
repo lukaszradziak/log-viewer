@@ -13,8 +13,6 @@ $viewer.style.display = 'none'
 document
   .querySelector('input[type=file]')
   .addEventListener('change', async (event) => {
-		console.log('changeee')
-
 		let fileContent = ''
 
 		try {

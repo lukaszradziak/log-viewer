@@ -43,9 +43,20 @@ export const csvToData = (content) => {
 	}
 }
 
+const hslToHex = (h, s, l) => {
+  l /= 100;
+  const a = s * Math.min(l, 1 - l) / 100;
+  const f = n => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color).toString(16).padStart(2, '0');
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
+}
+
 let graphs = []
 
-const createGraph = (id, label, series) => {
+const createGraph = (id, colors, label, series) => {
   return Highcharts.chart(id, {
     chart: {
       zoomType: 'x',
@@ -66,7 +77,7 @@ const createGraph = (id, label, series) => {
     title: {
       text: label
     },
-    colors: ['#'+Math.floor(Math.random()*16777215).toString(16)],
+    colors,
     tooltip: {
       valueDecimals: 2,
       split: true,
@@ -90,6 +101,10 @@ export const generateGraph = (domElement, labels, rows) => {
       name: label,
     }]
 
+    let colors = [];
+    const maxColors = 20
+    colors = [hslToHex(index%maxColors/maxColors*360, 100, 50)]
+
     if(index === 0){
       series = labels.map((label, index) => ({
         data: rows.map(row => row[index]),
@@ -97,10 +112,14 @@ export const generateGraph = (domElement, labels, rows) => {
         name: label,
         visible: index === 0,
       }))
+
+      colors = [...Array(maxColors)].map((element, index) => {
+        return hslToHex(index%maxColors/maxColors*360, 100, 50)
+      })
     }
 
     graphs.push(
-      createGraph($container.id, label, series)
+      createGraph($container.id, colors, label, series)
     )
   })
 }
