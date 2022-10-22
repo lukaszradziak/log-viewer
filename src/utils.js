@@ -25,15 +25,13 @@ export const csvToData = (content) => {
     .shift()
     .trim()
     .split(separator)
-    .filter(row => row)
 
   const rows = lines.map(line => {
     return line
       .trim()
       .split(separator)
-      .filter(row => row)
       .map(row => {
-        return parseFloat(row);
+        return parseFloat(row) || 0
       })
   })
 
@@ -96,7 +94,7 @@ export const generateGraph = (domElement, labels, rows) => {
     domElement.appendChild($container)
 
     let series = [{
-      data: rows.map(row => row[index]),
+      data: rows.map(row => row[index] || 0),
       lineWidth: 0.5,
       name: label,
     }]
@@ -107,7 +105,7 @@ export const generateGraph = (domElement, labels, rows) => {
 
     if(index === 0){
       series = labels.map((label, index) => ({
-        data: rows.map(row => row[index]),
+        data: rows.map(row => row[index] || 0),
         lineWidth: 0.5,
         name: label,
         visible: index === 0,
