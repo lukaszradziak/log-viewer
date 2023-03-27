@@ -1,4 +1,7 @@
 import Highcharts from 'highcharts';
+import Exporting from 'highcharts/modules/exporting';
+
+Exporting(Highcharts);
 
 export const readFileContent = (file) => {
 	const fileReader = new FileReader()
@@ -59,21 +62,15 @@ const createGraph = (id, colors, label, series) => {
     chart: {
       zoomType: 'x',
       height: 700,
-      events: {
-        selection: function(){
-          setTimeout(() => {
-            graphs.forEach((graph) => {
-              graph.xAxis[0].setExtremes(this.xAxis[0].min, this.xAxis[0].max);
-            })
-          }, 100)
-        }
-      },
     },
+    rangeSelector: {
+      selected: 2
+  },
     exporting: {
-      enabled: false
+      enabled: true
     },
     title: {
-      text: label
+      text: 'CSV'
     },
     colors,
     tooltip: {
@@ -88,36 +85,37 @@ export const generateGraph = (domElement, labels, rows) => {
 	domElement.innerHTML = ''
   graphs = []
 
-  labels.forEach((label, index) => {
-    const $container = document.createElement('div')
-    $container.id = `graph-${index}`
-    domElement.appendChild($container)
+  const label = labels[0];
+  const index = 0;
 
-    let series = [{
+  const $container = document.createElement('div')
+  $container.id = `graph-${index}`
+  domElement.appendChild($container)
+
+  let series = [{
+    data: rows.map(row => row[index] || 0),
+    lineWidth: 0.5,
+    name: label,
+  }]
+
+  let colors = [];
+  const maxColors = 20
+  colors = [hslToHex(index%maxColors/maxColors*360, 100, 50)]
+
+  if(index === 0){
+    series = labels.map((label, index) => ({
       data: rows.map(row => row[index] || 0),
       lineWidth: 0.5,
       name: label,
-    }]
+      visible: index === 0,
+    }))
 
-    let colors = [];
-    const maxColors = 20
-    colors = [hslToHex(index%maxColors/maxColors*360, 100, 50)]
+    colors = [...Array(maxColors)].map((element, index) => {
+      return hslToHex(index%maxColors/maxColors*360, 100, 50)
+    })
+  }
 
-    if(index === 0){
-      series = labels.map((label, index) => ({
-        data: rows.map(row => row[index] || 0),
-        lineWidth: 0.5,
-        name: label,
-        visible: index === 0,
-      }))
-
-      colors = [...Array(maxColors)].map((element, index) => {
-        return hslToHex(index%maxColors/maxColors*360, 100, 50)
-      })
-    }
-
-    graphs.push(
-      createGraph($container.id, colors, label, series)
-    )
-  })
+  graphs.push(
+    createGraph($container.id, colors, label, series)
+  )
 }
