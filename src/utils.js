@@ -58,13 +58,62 @@ const hslToHex = (h, s, l) => {
   return `#${f(0)}${f(8)}${f(4)}`;
 };
 
-let graphs = [];
+export const generateGraph = (domElement, labels, rows) => {
+  domElement.innerHTML = "";
+  const label = labels[0];
+  const index = 0;
 
-const createGraph = (id, colors, label, series) => {
-  return Highcharts.chart(id, {
+  const $container = document.createElement("div");
+  $container.id = `graph-${index}`;
+  domElement.appendChild($container);
+
+  let series = [
+    {
+      data: rows.map((row) => row[index] || 0),
+      lineWidth: 0.5,
+      name: label,
+    },
+  ];
+
+  const maxColors = 20;
+  let colors = [hslToHex(((index % maxColors) / maxColors) * 360, 100, 50)];
+
+  if (index === 0) {
+    series = labels.map((label, index) => ({
+      data: rows.map((row) => row[index] || 0),
+      lineWidth: 0.5,
+      name: label,
+      visible: false,
+    }));
+
+    colors = [...Array(maxColors)].map((element, index) => {
+      return hslToHex(((index % maxColors) / maxColors) * 360, 100, 50);
+    });
+  }
+
+  Highcharts.chart($container.id, {
     chart: {
       zoomType: "x",
       height: 700,
+      events: {
+        load: function () {
+          const visibleSeries = getFromStorage("visibleSeries");
+
+          for (const row of this.series) {
+            if (visibleSeries.indexOf(row.name) !== -1) {
+              row.visible = true;
+            }
+          }
+
+          this.render();
+        },
+        redraw: function () {
+          saveToStorage(
+            "visibleSeries",
+            this.series.filter((row) => row.visible).map((row) => row.name),
+          );
+        },
+      },
     },
     rangeSelector: {
       selected: 2,
@@ -84,41 +133,26 @@ const createGraph = (id, colors, label, series) => {
   });
 };
 
-export const generateGraph = (domElement, labels, rows) => {
-  domElement.innerHTML = "";
-  graphs = [];
+const saveToStorage = (key, jsonData) => {
+  let data = "{}";
 
-  const label = labels[0];
-  const index = 0;
-
-  const $container = document.createElement("div");
-  $container.id = `graph-${index}`;
-  domElement.appendChild($container);
-
-  let series = [
-    {
-      data: rows.map((row) => row[index] || 0),
-      lineWidth: 0.5,
-      name: label,
-    },
-  ];
-
-  let colors = [];
-  const maxColors = 20;
-  colors = [hslToHex(((index % maxColors) / maxColors) * 360, 100, 50)];
-
-  if (index === 0) {
-    series = labels.map((label, index) => ({
-      data: rows.map((row) => row[index] || 0),
-      lineWidth: 0.5,
-      name: label,
-      visible: index === 0,
-    }));
-
-    colors = [...Array(maxColors)].map((element, index) => {
-      return hslToHex(((index % maxColors) / maxColors) * 360, 100, 50);
-    });
+  try {
+    data = JSON.stringify(jsonData);
+  } catch (e) {
+    console.error("Problem with generating JSON");
   }
 
-  graphs.push(createGraph($container.id, colors, label, series));
+  localStorage.setItem(key, data);
+};
+
+const getFromStorage = (key) => {
+  let data = {};
+
+  try {
+    data = JSON.parse(localStorage.getItem(key));
+  } catch (e) {
+    console.error("Problem with generating JSON");
+  }
+
+  return data;
 };
