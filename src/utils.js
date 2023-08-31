@@ -130,6 +130,13 @@ export const generateGraph = (domElement, labels, rows) => {
       split: true,
     },
     series,
+    plotOptions: {
+      series: {
+        marker: {
+          enabled: false,
+        },
+      },
+    },
   });
 };
 
