@@ -24,7 +24,11 @@ export const csvToData = (content) => {
   const separator = ",";
   const lines = content.split("\n");
 
-  const labels = lines.shift().trim().split(separator);
+  const labels = lines
+    .shift()
+    .trim()
+    .split(separator)
+    .filter((label) => label.trim());
 
   const rows = lines.map((line) => {
     return line
