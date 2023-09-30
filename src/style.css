@@ -66,7 +66,7 @@ h1 {
   display: none;
 }
 
-button, .file-label {
+button, .button {
   display: inline-block;
   border-radius: 8px;
   border: 1px solid #ebebeb;
@@ -80,13 +80,13 @@ button, .file-label {
   margin-bottom: 8px;
   margin-right: 8px;
 }
-button:hover, .file-label:hover {
+button:hover, .button:hover {
   border-color: #ff6464aa;
 }
 button:focus,
-button:focus-visible, 
-.file-label:focus,
-.file-label:focus-visible {
+button:focus-visible,
+.button:focus,
+.button:focus-visible {
   outline: 1px auto -webkit-focus-ring-color;
 }
 
@@ -98,7 +98,7 @@ button:focus-visible,
   a:hover {
     color: #747bff;
   }
-  button, .file-label {
+  button, .button {
     background-color: #f9f9f9;
   }
 }

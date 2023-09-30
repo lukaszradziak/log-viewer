@@ -9,13 +9,16 @@
     <div id="app">
       <div class="uploader">
         <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100" class="logo"><rect width="100" height="100" rx="20" fill="#f23626"></rect><text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-size="65">🏎️</text></svg>        <h1>Log Viewer!</h1>
-        <label for="file" class="file-label">
+        <label for="file" class="file-label button">
           <span>Select file</span>
           <input id="file" type="file">
         </label>
+        <p>
+          <a href="?test">Sample data</a>
+        </p>
       </div>
       <div class="viewer">
-        <button class="select-new-file">Select new file</button>
+        <a href="/">Select new file</a>
         <div class="graph-container"></div>
       </div>
     </div>
