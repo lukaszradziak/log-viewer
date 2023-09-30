@@ -99,10 +99,14 @@ export const generateGraph = (domElement, labels, rows) => {
         load: function () {
           const visibleSeries = getFromStorage("visibleSeries");
 
-          for (const row of this.series) {
-            if (visibleSeries.indexOf(row.name) !== -1) {
-              row.visible = true;
+          if (visibleSeries) {
+            for (const row of this.series) {
+              if (visibleSeries.indexOf(row.name) !== -1) {
+                row.visible = true;
+              }
             }
+          } else {
+            this.series[0].visible = true;
           }
 
           this.render();
