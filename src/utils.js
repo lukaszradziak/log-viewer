@@ -97,6 +97,10 @@ export const generateGraph = (domElement, labels, rows) => {
       height: 700,
       events: {
         load: function () {
+          if (this.legend) {
+            this.legend.destroy();
+          }
+
           const visibleSeries = getFromStorage("visibleSeries");
 
           if (visibleSeries) {
