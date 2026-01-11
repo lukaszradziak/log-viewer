@@ -21,7 +21,7 @@ export const readFileContent = (file) => {
 };
 
 export const csvToData = (content) => {
-  const separator = ",";
+  const separator = /[,;]/;
   const lines = content.split("\n");
 
   const labels = lines
