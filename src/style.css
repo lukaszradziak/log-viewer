@@ -102,3 +102,7 @@ button:focus-visible,
     background-color: #f9f9f9;
   }
 }
+
+.graph-actions {
+  padding: 10px;
+}

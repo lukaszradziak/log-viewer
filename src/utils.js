@@ -45,6 +45,16 @@ export const csvToData = (content) => {
   };
 };
 
+const downloadCsv = (content, filename) => {
+  const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+};
+
 const hslToHex = (h, s, l) => {
   l /= 100;
   const a = (s * Math.min(l, 1 - l)) / 100;
@@ -62,6 +72,22 @@ export const generateGraph = (domElement, labels, rows) => {
   domElement.innerHTML = "";
   const label = labels[0];
   const index = 0;
+  let selectedRows = null;
+
+  const downloadButton = document.querySelector("button.download-selected");
+  if (downloadButton) {
+    downloadButton.onclick = () => {
+      if (!selectedRows || !selectedRows.length) {
+        alert("Select a range on the chart first.");
+        return;
+      }
+
+      const csvContent = [labels.join(","), ...selectedRows.map((row) => row.join(","))].join(
+        "\n",
+      );
+      downloadCsv(csvContent, `selected-${Date.now()}.csv`);
+    };
+  }
 
   const $container = document.createElement("div");
   $container.id = `graph-${index}`;
@@ -120,6 +146,19 @@ export const generateGraph = (domElement, labels, rows) => {
             "visibleSeries",
             this.series.filter((row) => row.visible).map((row) => row.name),
           );
+        },
+        selection: function (event) {
+          if (!event.xAxis || !event.xAxis.length) {
+            selectedRows = null;
+            return true;
+          }
+
+          const { min, max } = event.xAxis[0];
+          const startRow = Math.floor(min);
+          const endRow = Math.ceil(max);
+          selectedRows = rows.slice(startRow, endRow);
+
+          return true;
         },
       },
     },
